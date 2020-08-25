@@ -1,15 +1,31 @@
 #!/usr/bin/env node
 
 const program = require('commander');
-const package = require('./package.json');
+const figlet = require('figlet');
 
-program.version(package.version);
+const adonisModuleGenerate = require('./adonis/generators/index.js');
+const packageJson = require('./package.json');
 
+program.version(packageJson.version);
+
+console.log(figlet.textSync('Rembratech CLI'));
 program
-    .command('add [todo]')
-    .description('Adiciona um to-do')
-    .action((todo) => {
-        console.log(todo);
-    });
+  .option('-d, --debug', 'output extra debugging')
+  .option('-ma, --module-adonis', 'output extra debugging');
+
+program.parse(process.argv);
+
+if (program.debug) console.log(program.opts());
+
+if (program.moduleAdonis) {
+
+  adonisModuleGenerate()
+}
+
+    // .command('add [todo]')
+    // .description('Adiciona um to-do')
+    // .action((todo) => {
+    //     console.log(todo);
+    // });
 
 program.parse(process.argv);
