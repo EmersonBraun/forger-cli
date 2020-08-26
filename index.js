@@ -8,7 +8,7 @@ const packageJson = require('./package.json');
 
 program.version(packageJson.version);
 
-console.log(figlet.textSync('Rembratech CLI'));
+console.log(figlet.textSync('Forger CLI'));
 program
   .option('-d, --debug', 'output extra debugging')
   .option('-ma, --module-adonis', 'output extra debugging');

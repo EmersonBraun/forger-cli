@@ -1,10 +1,13 @@
 {
-  "name": "rembratech-cli",
+  "name": "@emersonbraun/forger",
   "version": "0.1.0",
   "description": "Cli of Rembratech",
   "main": "index.js",
-  "repository": "https://github.com/EmersonBraun/rembratech-cli",
-  "author": "EmersonBraun",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmersonBraun/rembratech-cli.git"
+  },
+  "author": "emersonbraun",
   "license": "MIT",
   "private": false,
   "dependencies": {
@@ -18,6 +21,18 @@
     "prompts": "^2.3.2"
   },
   "bin": {
-    "rembratech-cli": "index.js"
-  }
+    "forger": "index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/EmersonBraun/rembratech-cli/issues"
+  },
+  "homepage": "https://github.com/EmersonBraun/rembratech-cli#readme",
+  "scripts": {
+    "test": "npm test"
+  },
+  "keywords": [
+    "cli",
+    "generator",
+    "automatize"
+  ]
 }
