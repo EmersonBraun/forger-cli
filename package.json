@@ -1,11 +1,11 @@
 {
   "name": "@emersonbraun/forger",
-  "version": "0.1.1",
-  "description": "Cli of Rembratech",
+  "version": "0.2.1",
+  "description": "Cli to generate files",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EmersonBraun/rembratech-cli.git"
+    "url": "git+https://github.com/EmersonBraun/forger-cli.git"
   },
   "author": "emersonbraun",
   "license": "MIT",
@@ -24,9 +24,9 @@
     "forger": "index.js"
   },
   "bugs": {
-    "url": "https://github.com/EmersonBraun/rembratech-cli/issues"
+    "url": "https://github.com/EmersonBraun/forger-cli/issues"
   },
-  "homepage": "https://github.com/EmersonBraun/rembratech-cli#readme",
+  "homepage": "https://github.com/EmersonBraun/forger-cli#readme",
   "scripts": {
     "test": "npm test"
   },
