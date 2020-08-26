@@ -1,13 +1,13 @@
-const { getFile, getContent, mountTemplate, appendInFile } = require('../utils/file')
+const { getFile, getContent, mountTemplate, appendInFile } = require('../../utils/file')
 
-const Logger = require('../utils/logger')
+const Logger = require('../../utils/logger')
 
 function getName (moduleName) {
   return `Route ${moduleName.name.kebabCasePlural}`
 }
 
 function getPath () {
-  return '../../../start/routes.ts'
+  return 'start/routes.ts'
 }
 
 async function createRoute (moduleName) {
@@ -15,7 +15,7 @@ async function createRoute (moduleName) {
   const content = getContent(path)
   const name = getName(moduleName)
 
-  const file = getFile('route')
+  const file = getFile('adonis','route')
   const template = mountTemplate(file, moduleName)
 
   if (content.indexOf(template) === -1) {

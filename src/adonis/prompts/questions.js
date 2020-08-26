@@ -1,4 +1,4 @@
-const { toSnakeCase } = require('../utils/name')
+const { toSnakeCase, toSnakeCasePlural } = require('../../utils/name')
 // const { fakerOptions } = require('./fakerOptions')
 const fieldOptions = require('./fieldOptions')
 
@@ -28,18 +28,12 @@ const moduleQuestion = [
 ]
 
 const field = [
-  {
-    type: 'confirm',
-    name: 'isPrimary',
-    message: 'Is primary key?',
-    initial: false,
-  },
-  {
+    {
     type: 'text',
     name: 'name',
     message: 'Name of field',
     validate: value => !!value || 'Name is required',
-    initial: prev => prev ? 'id' : '',
+    initial: 'id',
   },
   {
     type: 'select',
@@ -63,6 +57,12 @@ const field = [
   },
   {
     type: 'confirm',
+    name: 'isPrimary',
+    message: 'Is primary key?',
+    initial: false,
+  },
+  {
+    type: 'confirm',
     name: 'isRelationed',
     message: 'Is Relationed?',
     initial: false,
@@ -80,6 +80,7 @@ const relation = [
     type: 'text',
     name: 'tableName',
     message: 'Name of table',
+    initial: prev => toSnakeCasePlural(prev),
     validate: value => !!value || 'Name is required',
   },
   {
@@ -94,19 +95,12 @@ const relation = [
     name: 'fieldType',
     message: 'Type of field',
     choices: fieldOptions,
-    initial: 1,
+    initial: 2,
   },
 ]
 
 const manyToMany = name => [
-  {
-    type: 'text',
-    name: 'moduleField',
-    message: 'field in the module that makes the relation',
-    initial: 'id',
-    validate: value => !!value || 'Name of model is required',
-  },
-  {
+    {
     type: 'text',
     name: 'modelName',
     message: 'Name of model relationed',
@@ -116,6 +110,7 @@ const manyToMany = name => [
     type: 'text',
     name: 'tableName',
     message: 'Name of table',
+    initial: prev => toSnakeCasePlural(prev),
     validate: value => !!value || 'Name is required',
   },
   {
@@ -124,6 +119,13 @@ const manyToMany = name => [
     message: 'Name of pivot table that makes the relation',
     initial: prev => name + '_has_' + toSnakeCase(prev),
     validate: value => !!value || 'Name is required',
+  },
+  {
+    type: 'text',
+    name: 'moduleField',
+    message: 'field in the module that makes the relation',
+    initial: 'id',
+    validate: value => !!value || 'Name of model is required',
   },
   {
     type: 'text',

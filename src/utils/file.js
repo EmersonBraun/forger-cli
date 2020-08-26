@@ -3,14 +3,14 @@ const path = require('path')
 const handlebars = require('handlebars')
 const Logger = require('./logger')
 
-function getFile (type) {
-  const file = path.join(__dirname, `../../../ModuleGenerate/stubs/${type}.hbs`)
+function getFile (moduleName, type) {
+  const file = path.join(__dirname, `../${moduleName}/stubs/${type}.hbs`)
   return fs.readFileSync(file, {encoding: 'utf-8'})
 }
 
 function getContent (filePath) {
-  const file = path.join(__dirname, filePath)
-  return fs.readFileSync(file, {encoding: 'utf-8'})
+  // const file = path.join(__dirname, filePath)
+  return fs.readFileSync(filePath, {encoding: 'utf-8'})
 }
 
 function ensureDirectoryExistence (filePath, resolve = false) {

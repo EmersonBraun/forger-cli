@@ -3,7 +3,7 @@
 const program = require('commander');
 const figlet = require('figlet');
 
-const adonisModuleGenerate = require('./adonis/generators/index.js');
+const adonisModuleGenerate = require('./src/adonis/generators/index.js');
 const packageJson = require('./package.json');
 
 program.version(packageJson.version);

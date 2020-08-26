@@ -1,4 +1,4 @@
-const { getFile, mountTemplate, createFile } = require('../utils/file')
+const { getFile, mountTemplate, createFile } = require('../../utils/file')
 
 function getPath () {
   return 'app/Repositories/'
@@ -12,7 +12,7 @@ async function createRepository (moduleName) {
   const path = getPath()
   const name = getName(moduleName)
 
-  const file = getFile('repository')
+  const file = getFile('adonis','repository')
   const template = mountTemplate(file, moduleName)
 
   await createFile(name, path, template)

@@ -1,7 +1,8 @@
 const prompts = require('prompts');
-const Logger = require('../utils/logger');
+const Logger = require('../../utils/logger');
 const { moduleQuestion, field, relation, manyToMany, proceed } = require('./questions');
-const { nameOptions, toPascalCase, toCamelCase } = require('../utils/name');
+const { nameOptions, toPascalCase, toCamelCase } = require('../../utils/name');
+const { printTable } = require('../../utils/table');
 
 const moduleToGenerate = {
   name: {},
@@ -55,11 +56,24 @@ async function getManyToMany () {
   return manyData
 }
 
-async function finalize () {
+function showData () {
   console.clear()
-  Logger.info(`Module: ${moduleToGenerate.name.pascalCase}`)
   const fields = moduleToGenerate.fields.map(f => f.name).join(', ')
-  Logger.info(`fields: ${fields}`)
+  const relations = moduleToGenerate.relations.map(r => r.tableName).join(', ')
+  const manyToMany = moduleToGenerate.manyToMany.map(m => m.tableName).join(', ')
+  
+  const columns = [
+    ['Module', moduleToGenerate.name.pascalCase ],
+    ['fields', fields ],
+    ['relations', relations ],
+    ['manyToMany', manyToMany ],
+  ]
+
+  printTable({head: ['KEY', 'VALUE']}, columns)
+}
+
+async function finalize () {
+  showData()
   return await isProceed('Is this data correct? Do you want to proceed?')
 }
 
@@ -70,16 +84,16 @@ async function isProceed (msg) {
 
 async function getQuestions () {
   moduleToGenerate.name = await getModuleName()
-  Logger.info('now insert the necessary fields')
-  do {
-    moduleToGenerate.fields.push(await getFields())
-  } while (await isProceed('More fields?'))
+  // Logger.info('now insert the necessary fields')
+  // do {
+  //   moduleToGenerate.fields.push(await getFields())
+  // } while (await isProceed('More fields?'))
 
-  if (await isProceed('Has many to many relations')) {
-    do {
-      moduleToGenerate.manyToMany.push(await getManyToMany())
-    } while (await isProceed('More many to many relations?'))
-  }
+  // if (await isProceed('Has many to many relations')) {
+  //   do {
+  //     moduleToGenerate.manyToMany.push(await getManyToMany())
+  //   } while (await isProceed('More many to many relations?'))
+  // }
 
   if(await finalize()) {
     return moduleToGenerate

@@ -8,6 +8,7 @@ const toKebabCase = str => {
 }
 
 const toSnakeCase = str => snakeCase(str)
+const toSnakeCasePlural = str => snakeCase(pluralize(str))
 const toCamelCase = str => camelCase(str)
 const toPascalCase = str => pascalCase(str)
 
@@ -28,6 +29,7 @@ function nameOptions (name) {
 module.exports = {
   toKebabCase,
   toSnakeCase,
+  toSnakeCasePlural,
   toCamelCase,
   toPascalCase,
   nameOptions,

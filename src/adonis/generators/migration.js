@@ -1,4 +1,4 @@
-const { getFile, mountTemplate, createFile } = require('../utils/file')
+const { getFile, mountTemplate, createFile } = require('../../utils/file')
 
 function getPath () {
   return 'database/migrations/'
@@ -38,7 +38,7 @@ function validateFields (moduleName) {
 
 function createManyToMany (moduleName, path) {
   moduleName.manyToMany.map(many => {
-    const file = getFile('migration_many_to_many')
+    const file = getFile('adonis','migration_many_to_many')
     const template = mountTemplate(file, {many})
     createFile(manyName(many.pivotTable), path, template)
   })
@@ -48,7 +48,7 @@ async function createMigration (moduleName) {
   const path = getPath()
   const name = getName(moduleName)
 
-  const file = getFile('migration')
+  const file = getFile('adonis','migration')
   moduleName.fields = validateFields(moduleName)
   const template = mountTemplate(file, moduleName)
 

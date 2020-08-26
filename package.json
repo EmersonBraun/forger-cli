@@ -9,8 +9,10 @@
   "private": false,
   "dependencies": {
     "change-case": "^4.1.1",
+    "cli-table": "^0.3.1",
     "commander": "^6.0.0",
     "figlet": "^1.5.0",
+    "figures": "^3.2.0",
     "handlebars": "^4.7.6",
     "pluralize": "^8.0.0",
     "prompts": "^2.3.2"

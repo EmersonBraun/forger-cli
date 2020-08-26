@@ -1,4 +1,4 @@
-const { getFile, mountTemplate, createFile } = require('../utils/file')
+const { getFile, mountTemplate, createFile } = require('../../utils/file')
 
 function getPath () {
   return 'database/factories/'
@@ -53,7 +53,7 @@ async function createFactory (moduleName) {
   const path = getPath()
   const name = getName(moduleName)
 
-  const file = getFile('factory')
+  const file = getFile('adonis','factory')
   moduleName.fields = validateFields(moduleName)
   const template = mountTemplate(file, moduleName)
 

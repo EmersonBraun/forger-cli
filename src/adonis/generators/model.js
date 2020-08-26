@@ -1,4 +1,4 @@
-const { getFile, mountTemplate, createFile } = require('../utils/file')
+const { getFile, mountTemplate, createFile } = require('../../utils/file')
 
 function getPath () {
   return 'app/Models/'
@@ -36,7 +36,7 @@ async function createModel (moduleName) {
   const path = getPath()
   const name = getName(moduleName)
 
-  const file = getFile('model')
+  const file = getFile('adonis','model')
   moduleName.fields = validateFields(moduleName)
   const template = mountTemplate(file, moduleName)
   await createFile(name, path, template)
