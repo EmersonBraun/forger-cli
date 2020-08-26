@@ -1,6 +1,6 @@
 {
   "name": "@emersonbraun/forger",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Cli of Rembratech",
   "main": "index.js",
   "repository": {
