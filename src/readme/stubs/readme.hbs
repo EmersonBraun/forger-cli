@@ -1,0 +1,49 @@
+# {{module.projectName}}
+{{module.projectDescription}}
+
+{{#if module.prerequisites}}
+### Prerequisites
+
+{{#each module.prerequisites}}
+* [{{name}}]({{link}})
+{{/each}}
+{{/if}}
+
+### Installing
+{{#each module.installing}}
+{{step}}
+{{#if command}}
+```
+{{command}}
+```
+{{/if}}
+{{/each}}
+
+{{#if module.usage}}
+### Usage
+
+{{#each module.usage}}
+{{step}}
+{{#if command}}
+```
+{{command}}
+```
+{{/if}}
+{{/each}}
+{{/if}}
+
+{{#if module.semVer}}
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/{{module.userName}}/{{module.repository}}/tags). 
+{{/if}}
+
+## Author
+
+* **{{module.author}}** - *Initial work* - [{{module.userName}}](https://github.com/{{module.userName}})
+
+See also the list of [contributors](https://github.com/{{module.userName}}/{{module.repository}}/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
