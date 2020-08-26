@@ -1,7 +1,3 @@
-const { toSnakeCase, toSnakeCasePlural } = require('../../utils/name')
-// const { fakerOptions } = require('./fakerOptions')
-const fieldOptions = require('./fieldOptions')
-
 const moduleQuestion = [
   {
     type: 'text',
@@ -11,9 +7,9 @@ const moduleQuestion = [
   },
   {
     type: 'text',
-    name: 'projectName',
-    message: 'Name of project',
-    validate: value => !!value || 'Name is required',
+    name: 'projectDescription',
+    message: 'Description of project',
+    validate: value => !!value || 'Description is required',
   },
   {
     type: 'text',
@@ -32,12 +28,6 @@ const moduleQuestion = [
     name: 'repository',
     message: 'Repository name (github)',
     validate: value => !!value || 'Repository name is required',
-  },
-  {
-    type: 'confirm',
-    name: 'hasPrerequisites',
-    message: 'Has prerequisites?',
-    initial: true,
   },
 ]
 

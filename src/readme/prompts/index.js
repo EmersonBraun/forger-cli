@@ -5,71 +5,45 @@ const { nameOptions, toPascalCase, toCamelCase } = require('../../utils/name');
 const { printTable } = require('../../utils/table');
 
 const moduleToGenerate = {
-  projectDescription: null,
-  author: null,
-  userName: null,
-  repository: null,
+  main: [],
   prerequisites: [],
   installing: [],
   usage: [],
   semVer: true,
 }
 
-async function getModuleName () {
-  const responseModule = await prompts(moduleQuestion)
-  return nameOptions(responseModule.moduleName)
+async function getMainQuestions () {
+  return await prompts(moduleQuestion)
 }
 
-async function getFields () {
-  let fieldData = {
-    name: '',
-    fieldType: '',
-    specificType: '',
-    isRelationed: false,
-  }
-  fieldData = await prompts(field)
-
-  if (fieldData.fieldType === 'datetime') {
-    moduleToGenerate.hasDatetime = true
-  }
-
-  if (fieldData.isRelationed) {
-    await getRelated (fieldData.name)
-  }
-
-  return fieldData
+async function getPrerequisites () {
+  return await prompts(prerequisites)
 }
 
-async function getRelated (field) {
-  let relationData = await prompts(relation)
-  relationData.field = field
-  relationData.camelName = toCamelCase(relationData.modelName)
-  relationData.modelName = toPascalCase(relationData.modelName)
-
-  moduleToGenerate.relations.push(relationData)
+async function getInstalling () {
+  return await prompts(installing)
 }
 
-async function getManyToMany () {
-  let manyData = await prompts(manyToMany(moduleToGenerate.name.snakeCasePlural))
-  manyData.className = toPascalCase(manyData.pivotTable)
-  manyData.moduleTable = moduleToGenerate.name.snakeCasePlural
-  manyData.camelName = toCamelCase(manyData.modelName)
-  manyData.modelName = toPascalCase(manyData.modelName)
-
-  return manyData
+async function getUsage () {
+  return await prompts(usage)
 }
 
 function showData () {
   console.clear()
-  const fields = moduleToGenerate.fields.map(f => f.name).join(', ')
-  const relations = moduleToGenerate.relations.map(r => r.tableName).join(', ')
-  const manyToMany = moduleToGenerate.manyToMany.map(m => m.tableName).join(', ')
+  const prerequisites = moduleToGenerate.prerequisites.map(r => r.name).join(', ')
+  const installing = moduleToGenerate.installing.map(m => m.step).join(', ')
+  const usage = moduleToGenerate.usage.map(m => m.step).join(', ')
   
   const columns = [
-    ['Module', moduleToGenerate.name.pascalCase ],
-    ['fields', fields ],
-    ['relations', relations ],
-    ['manyToMany', manyToMany ],
+    ['projectName', moduleToGenerate.main.projectName ],
+    ['projectDescription', moduleToGenerate.main.projectDescription ],
+    ['author', moduleToGenerate.main.author ],
+    ['userName', moduleToGenerate.main.userName ],
+    ['repository', moduleToGenerate.main.repository ],
+    ['Prerequisites', prerequisites ],
+    ['Installing', installing ],
+    ['Usage', usage ],
+    ['semVer', moduleToGenerate.semVer ],
   ]
 
   printTable({head: ['KEY', 'VALUE']}, columns)
@@ -86,17 +60,25 @@ async function isProceed (msg) {
 }
 
 async function getQuestions () {
-  moduleToGenerate.name = await getModuleName()
-  // Logger.info('now insert the necessary fields')
-  // do {
-  //   moduleToGenerate.fields.push(await getFields())
-  // } while (await isProceed('More fields?'))
+  moduleToGenerate.main = await getMainQuestions()
+  if (await isProceed('Has Prerequisites?')) {
+    do {
+      moduleToGenerate.prerequisites.push(await getPrerequisites())
+    } while (await isProceed('More Prerequisites?'))
+  }
 
-  // if (await isProceed('Has many to many relations')) {
-  //   do {
-  //     moduleToGenerate.manyToMany.push(await getManyToMany())
-  //   } while (await isProceed('More many to many relations?'))
-  // }
+  Logger.info('Now insert necessary steps to installing')
+  do {
+    moduleToGenerate.installing.push(await getInstalling())
+  } while (await isProceed('More installing steps??'))
+
+  if (await isProceed('Has usage steps?')) {
+    do {
+      moduleToGenerate.usage.push(await getUsage())
+    } while (await isProceed('More usage steps?'))
+  }
+
+  moduleToGenerate.semVer = await isProceed('Use SemVer?')
 
   if(await finalize()) {
     return moduleToGenerate
