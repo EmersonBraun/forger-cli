@@ -1,6 +1,6 @@
 {
   "name": "@emersonbraun/forger",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Cli to generate files",
   "main": "index.js",
   "repository": {
@@ -30,9 +30,18 @@
   "scripts": {
     "test": "npm test"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "keywords": [
     "cli",
     "generator",
     "automatize"
-  ]
+  ],
+  "devDependencies": {
+    "eslint": "^7.7.0",
+    "git-commit-msg-linter": "^2.4.5",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.13"
+  }
 }

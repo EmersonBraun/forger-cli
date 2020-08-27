@@ -1,7 +1,5 @@
 import Factory from '@ioc:Adonis/Lucid/Factory'
-
 import {{module.name.pascalCase}} from 'App/Models/{{module.name.pascalCase}}'
-
 {{#if module.relations}}
 {{#each module.relations}}
 import { random{{modelName}}Id } from './{{modelName}}Factory'
@@ -9,7 +7,7 @@ import { random{{modelName}}Id } from './{{modelName}}Factory'
 {{/if}}
 
 export const {{module.name.pascalCase}}Factory = Factory
-  .define({{module.name.pascalCase}}, {{#if module.relations}}async{{/if}} (faker) => ({
+  .define({{module.name.pascalCase}}, {{#if module.relations}}async {{/if}}(faker) => ({
     {{#each module.fields}}
     {{name}}: faker.{{specificType}},
     {{/each}}

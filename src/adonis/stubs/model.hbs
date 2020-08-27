@@ -1,4 +1,4 @@
-import { BaseModel, column, HasOne, hasOne, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column{{#if module.relations}}, HasOne, hasOne,{{/if}}{{#if module.manyToMany}}manyToMany, ManyToMany{{/if}} } from '@ioc:Adonis/Lucid/Orm'
 {{#if module.hasDatetime}}import { DateTime } from 'luxon'{{/if}}
 {{#if module.relations}}
 {{#each module.relations}}import {{modelName}} from './{{modelName}}'{{/each}}
@@ -15,13 +15,14 @@ export default class {{module.name.pascalCase}} extends BaseModel {
 {{/each}}
 {{#if module.relations}}
 {{#each module.relations}}
+
   @hasOne(() => {{modelName}})
   public {{camelName}}: HasOne<typeof {{modelName}}>
 {{/each}}
 {{/if}}
-
 {{#if module.manyToMany}}
 {{#each module.manyToMany}}
+
   @manyToMany(() => {{modelName}}, {
     pivotTable: '{{pivotTable}}',
   })

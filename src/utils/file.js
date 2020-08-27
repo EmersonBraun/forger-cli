@@ -1,75 +1,100 @@
-const fs = require('fs')
-const path = require('path')
-const handlebars = require('handlebars')
-const Logger = require('./logger')
+const fs = require('fs');
+const path = require('path');
+const handlebars = require('handlebars');
+const Logger = require('./logger');
 
-function getFile (moduleName, type) {
-  const file = path.join(__dirname, `../${moduleName}/stubs/${type}.hbs`)
-  return fs.readFileSync(file, {encoding: 'utf-8'})
+function getFile(moduleName, type, debug = false) {
+  const file = path.join(__dirname, `../${moduleName}/stubs/${type}.hbs`);
+  Logger.debug(debug, 'get file', file);
+  const content = fs.readFileSync(file, {encoding: 'utf-8'});
+  Logger.debug(debug, 'read file', content);
+  return content;
 }
 
-function getContent (filePath) {
-  // const file = path.join(__dirname, filePath)
-  return fs.readFileSync(filePath, {encoding: 'utf-8'})
-}
+function getContent(filePath, resolve = false, debug = false) {
+  const file = resolve ? path.join(__dirname, filePath) : filePath;
+  Logger.debug(debug, 'file path', file);
 
-function ensureDirectoryExistence (filePath, resolve = false) {
-  if (resolve) {
-    filePath = path.join(__dirname, filePath)
-  }
   try {
-    const exist = fs.existsSync(filePath)
+    const content = fs.readFileSync(file, {encoding: 'utf-8'});
+    Logger.debug(debug, 'content of file', content);
+    return content;
+  } catch (error) {
+    Logger.debug(debug, 'Not get content', error);
+    Logger.warn('Not get content, are you in correct folder?');
+    return false;
+  }
+}
+
+function ensureDirectoryExistence(filePath, resolve = false, debug = false) {
+  const file = resolve ? path.join(__dirname, filePath) : filePath;
+  Logger.debug(debug, 'file path', file);
+  try {
+    const exist = fs.existsSync(filePath);
     if(!exist) {
       try {
-        fs.mkdirSync(filePath, { recursive: true })
+        const mkdir = fs.mkdirSync(file, { recursive: true });
+        Logger.debug(debug, 'Mkdir', mkdir);
       } catch (error) {
-        console.error(error)
-        throw new Error('Error to create folder')
+        Logger.error('Error to create folder', error);
       }
     }
   } catch (error) {
-    console.error(error)
-    throw new Error('Error to find folder')
+    Logger.error('Error to find folder', error);
   }
 }
 
-function mountTemplate (file, module) {
-  const template = handlebars.compile(file)
-  return template({ module })
+function mountTemplate(file, module, debug = false) {
+  const template = handlebars.compile(file);
+  const compiled = template({ module });
+  Logger.debug(debug, 'Template', compiled);
+  return compiled;
 }
 
-function createFile (name, path, template) {
-  ensureDirectoryExistence(path)
-  const fileName = `${path}${name}`
+function createFile(name, pathFile, template) {
+  ensureDirectoryExistence(pathFile);
+  const fileName = `${pathFile}${name}`;
 
   try {
-    fs.writeFileSync(fileName, template)
-    Logger.success(`Create ${name}`)
+    fs.writeFileSync(fileName, template);
+    Logger.success(`Create ${name}`);
   } catch (error) {
-    Logger.warn(`Error to create file ${name}`, error)
+    Logger.error(`Error to create file ${name}`, error);
   }
 }
 
-function appendInFile (name, filePath, template) {
-  const file = path.join(__dirname, filePath)
+function appendInFile(name, filePath, template, resolve = false) {
+  const file = resolve ? path.join(__dirname, filePath) : filePath;
   try {
-    fs.appendFileSync(file, template)
-    Logger.success(`Added ${name}`)
+    fs.appendFileSync(file, template);
+    Logger.success(`Added ${name}`);
   } catch (error) {
-    Logger.warn(`Error to create file ${name}`, error)
+    Logger.error(`Error to append in file ${name}`, error);
   }
 }
 
-function copyFile (name, pathOrigin, pathDestiny) {
-  ensureDirectoryExistence(pathDestiny)
-  const origin = path.join(__dirname, `${pathOrigin}${name}.hbs`)
-  const destiny = path.join(__dirname, `${pathDestiny}${name}.ts`)
+// eslint-disable-next-line max-params
+function copyFile(
+  name,
+  pathOrigin,
+  pathDestiny,
+  resolveOrigin = false,
+  resolveDestiny = false,
+  debug = false
+) {
+  ensureDirectoryExistence(pathDestiny);
+  const origin =
+    resolveOrigin ? path.join(__dirname, `${pathOrigin}${name}.hbs`) : `${pathOrigin}${name}.hbs`;
+  Logger.debug(debug, 'file origin', origin);
+  const destiny =
+    resolveDestiny ? path.join(__dirname, `${pathDestiny}${name}.ts`) : `${pathDestiny}${name}.ts`;
+  Logger.debug(debug, 'destiny', destiny);
 
   try {
-    fs.copyFileSync(origin, destiny)
-    Logger.success(`Create ${name}`)
+    fs.copyFileSync(origin, destiny);
+    Logger.success(`Create ${name}`);
   } catch (error) {
-    Logger.warn('Error to create file', error)
+    Logger.error('Error to create file', error);
   }
 }
 
@@ -80,5 +105,5 @@ module.exports = {
   mountTemplate,
   createFile,
   appendInFile,
-  copyFile,
-}
+  copyFile
+};

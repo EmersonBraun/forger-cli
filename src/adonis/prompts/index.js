@@ -9,98 +9,99 @@ const moduleToGenerate = {
   fields: [],
   relations: [],
   manyToMany: [],
-  hasDatetime: false,
+  hasDatetime: false
+};
+
+async function getModuleName() {
+  const responseModule = await prompts(moduleQuestion);
+  return nameOptions(responseModule.moduleName);
 }
 
-async function getModuleName () {
-  const responseModule = await prompts(moduleQuestion)
-  return nameOptions(responseModule.moduleName)
+async function getRelated(fieldModule) {
+  let relationData = await prompts(relation);
+  relationData.field = fieldModule;
+  relationData.camelName = toCamelCase(relationData.modelName);
+  relationData.modelName = toPascalCase(relationData.modelName);
+
+  moduleToGenerate.relations.push(relationData);
 }
 
-async function getFields () {
+async function getFields() {
   let fieldData = {
     name: '',
     fieldType: '',
     specificType: '',
-    isRelationed: false,
-  }
-  fieldData = await prompts(field)
+    isRelationed: false
+  };
+  fieldData = await prompts(field);
 
   if (fieldData.fieldType === 'datetime') {
-    moduleToGenerate.hasDatetime = true
+    moduleToGenerate.hasDatetime = true;
   }
 
   if (fieldData.isRelationed) {
-    await getRelated (fieldData.name)
+    await getRelated(fieldData.name);
   }
 
-  return fieldData
+  return fieldData;
 }
 
-async function getRelated (field) {
-  let relationData = await prompts(relation)
-  relationData.field = field
-  relationData.camelName = toCamelCase(relationData.modelName)
-  relationData.modelName = toPascalCase(relationData.modelName)
+async function getManyToMany() {
+  let manyData = await prompts(manyToMany(moduleToGenerate.name.snakeCasePlural));
+  manyData.className = toPascalCase(manyData.pivotTable);
+  manyData.moduleTable = moduleToGenerate.name.snakeCasePlural;
+  manyData.camelName = toCamelCase(manyData.modelName);
+  manyData.modelName = toPascalCase(manyData.modelName);
 
-  moduleToGenerate.relations.push(relationData)
+  return manyData;
 }
 
-async function getManyToMany () {
-  let manyData = await prompts(manyToMany(moduleToGenerate.name.snakeCasePlural))
-  manyData.className = toPascalCase(manyData.pivotTable)
-  manyData.moduleTable = moduleToGenerate.name.snakeCasePlural
-  manyData.camelName = toCamelCase(manyData.modelName)
-  manyData.modelName = toPascalCase(manyData.modelName)
+function showData() {
+  console.clear();
+  const filteredfields = moduleToGenerate.fields.map(f => f.name).join(', ');
+  const filteredrelations = moduleToGenerate.relations.map(r => r.tableName).join(', ');
+  const filteredmanyToMany = moduleToGenerate.manyToMany.map(m => m.tableName).join(', ');
 
-  return manyData
-}
-
-function showData () {
-  console.clear()
-  const fields = moduleToGenerate.fields.map(f => f.name).join(', ')
-  const relations = moduleToGenerate.relations.map(r => r.tableName).join(', ')
-  const manyToMany = moduleToGenerate.manyToMany.map(m => m.tableName).join(', ')
-  
   const columns = [
     ['Module', moduleToGenerate.name.pascalCase ],
-    ['fields', fields ],
-    ['relations', relations ],
-    ['manyToMany', manyToMany ],
-  ]
+    ['fields', filteredfields ],
+    ['relations', filteredrelations ],
+    ['manyToMany', filteredmanyToMany ]
+  ];
 
-  printTable({head: ['KEY', 'VALUE']}, columns)
+  printTable({head: ['KEY', 'VALUE']}, columns);
 }
 
-async function finalize () {
-  showData()
-  return await isProceed('Is this data correct? Do you want to proceed?')
+async function isProceed(msg) {
+  const response = await prompts(proceed(msg));
+  return response.continue;
 }
 
-async function isProceed (msg) {
-  const response = await prompts(proceed(msg))
-  return response.continue
+async function finalize() {
+  showData();
+  return await isProceed('Is this data correct? Do you want to proceed?');
 }
 
-async function getQuestions () {
-  moduleToGenerate.name = await getModuleName()
-  // Logger.info('now insert the necessary fields')
-  // do {
-  //   moduleToGenerate.fields.push(await getFields())
-  // } while (await isProceed('More fields?'))
+async function getQuestions() {
+  moduleToGenerate.name = await getModuleName();
+  Logger.info('now insert the necessary fields');
+  do {
+    moduleToGenerate.fields.push(await getFields());
+  } while (await isProceed('More fields?'));
 
-  // if (await isProceed('Has many to many relations')) {
-  //   do {
-  //     moduleToGenerate.manyToMany.push(await getManyToMany())
-  //   } while (await isProceed('More many to many relations?'))
-  // }
+  if (await isProceed('Has many to many relations')) {
+    do {
+      moduleToGenerate.manyToMany.push(await getManyToMany());
+    } while (await isProceed('More many to many relations?'));
+  }
 
   if(await finalize()) {
-    return moduleToGenerate
+    return moduleToGenerate;
   }
-  return false
+  return false;
 }
 
 module.exports = {
-  getQuestions
-}
+  getQuestions,
+  isProceed
+};

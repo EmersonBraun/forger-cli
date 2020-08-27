@@ -30,8 +30,11 @@ program
 
 program.parse(process.argv);
 
-if (program.debug) console.log(program.opts());
-if (program.moduleAdonis) adonisModuleGenerate()
-if (program.readme) readmeGenerate()
+if (program.moduleAdonis) {
+  adonisModuleGenerate(program.debug);
+}
+if (program.readme) {
+  readmeGenerate(program.debug);
+}
 
 program.parse(process.argv);
