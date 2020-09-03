@@ -7,8 +7,8 @@ import { random{{modelName}}Id } from './{{modelName}}Factory'
 {{/if}}
 
 export const {{module.name.pascalCase}}Factory = Factory
-  .define({{module.name.pascalCase}}, {{#if module.relations}}async {{/if}}(faker) => ({
-    {{#each module.fields}}
+  .define({{module.name.pascalCase}}, {{#if module.relations}}async {{/if}}({faker}) => ({
+    {{#each module.fieldsFactory}}
     {{name}}: faker.{{specificType}},
     {{/each}}
   {{#if module.relations}}

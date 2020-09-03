@@ -5,7 +5,7 @@ export default class {{module.name.pascalCasePlural}} extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-    {{#each module.fields}}
+    {{#each module.fieldsMigration}}
       table.{{type}}('{{name}}').{{nullable}}()
     {{/each}}
     {{#if module.relations}}

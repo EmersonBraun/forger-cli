@@ -1,6 +1,6 @@
 {
   "name": "@emersonbraun/forger",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Cli to generate files",
   "main": "index.js",
   "repository": {
@@ -29,9 +29,6 @@
   "homepage": "https://github.com/EmersonBraun/forger-cli#readme",
   "scripts": {
     "test": "npm test"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
   },
   "keywords": [
     "cli",

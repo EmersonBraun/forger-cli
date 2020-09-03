@@ -1,8 +1,8 @@
 import { schema{{#if module.relations}}, rules{{/if}} } from '@ioc:Adonis/Core/Validator'
 
 export const {{module.name.pascalCase}}Schema = schema.create({
-{{#each module.fields}}
-  {{name}}: schema.{{fieldType}}(){{#if isRequired}}.required(){{/if}},
+{{#each module.fieldsSchema}}
+  {{name}}: schema.{{type}}(){{#if isRequired}}.required(){{/if}},
 {{/each}}
 {{#if module.relations}}
 {{#each module.relations}}

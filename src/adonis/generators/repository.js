@@ -1,23 +1,23 @@
-const { getFile, mountTemplate, createFile } = require('../../utils/file')
+const { getFile, mountTemplate, createFile } = require('../../utils/file');
 
-function getPath () {
-  return 'app/Repositories/'
+function getPath() {
+  return 'app/Repositories/';
 }
 
-function getName (moduleName) {
-  return `${moduleName.name.pascalCasePlural}Repository.ts`
+function getName(moduleName) {
+  return `${moduleName.name.pascalCasePlural}Repository.ts`;
 }
 
-async function createRepository (moduleName) {
-  const path = getPath()
-  const name = getName(moduleName)
+async function createRepository(moduleName) {
+  const path = getPath();
+  const name = getName(moduleName);
 
-  const file = getFile('adonis','repository')
-  const template = mountTemplate(file, moduleName)
+  const file = getFile('adonis', 'repository');
+  const template = mountTemplate(file, moduleName);
 
-  await createFile(name, path, template)
+  await createFile(name, path, template);
 }
 
 module.exports = {
   createRepository
-}
+};

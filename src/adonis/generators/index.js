@@ -14,7 +14,7 @@ module.exports = async function adonisModuleGenerate(debug) {
   if (moduleName) {
     const exists = createRoute(moduleName, debug);
     const continueCreate =
-    exists ? true : isProceed('Route exist, module possible already exists, want continue?');
+    !exists ? true : isProceed('Route exist, module possible already exists, want continue?');
     if (continueCreate) {
       createMigration(moduleName);
       createSeeder(moduleName);

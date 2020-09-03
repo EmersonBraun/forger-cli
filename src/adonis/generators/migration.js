@@ -1,64 +1,67 @@
-const { getFile, mountTemplate, createFile } = require('../../utils/file')
+const { getFile, mountTemplate, createFile } = require('../../utils/file');
 
-function getPath () {
-  return 'database/migrations/'
+function getPath() {
+  return 'database/migrations/';
 }
 
-function getName (moduleName) {
-  return `${Date.now()}_${moduleName.name.snakeCasePlural}.ts`
+function getName(moduleName) {
+  return `${Date.now()}_${moduleName.name.snakeCasePlural}.ts`;
 }
 
-function manyName (name) {
-  return `9999999999999_${name}.ts`
+function manyName(name) {
+  return `9999999999999_${name}.ts`;
 }
 
-function getType (field) {
+function getType(field) {
   if (field.isPrimary) {
-    return 'increments'
+    return 'increments';
   }
-  return field.fieldType
+  if (field.fieldType === 'datetime') {
+    return 'dateTime';
+  }
+  return field.fieldType;
 }
 
-function getNullable (field) {
+function getNullable(field) {
   if (field.isRequired) {
-    return 'notNullable'
+    return 'notNullable';
   }
-  return 'nullable'
+  return 'nullable';
 }
 
-function validateFields (moduleName) {
+function validateFields(moduleName) {
   return moduleName.fields.map(f => {
     return {
       type: getType(f),
       name: f.name,
-      nullable: getNullable(f),
-    }
-  })
+      nullable: getNullable(f)
+    };
+  });
 }
 
-function createManyToMany (moduleName, path) {
+function createManyToMany(moduleName, path) {
   moduleName.manyToMany.map(many => {
-    const file = getFile('adonis','migration_many_to_many')
-    const template = mountTemplate(file, {many})
-    createFile(manyName(many.pivotTable), path, template)
-  })
+    const file = getFile('adonis', 'migration_many_to_many');
+    const template = mountTemplate(file, {many});
+    createFile(manyName(many.pivotTable), path, template);
+  });
 }
 
-async function createMigration (moduleName) {
-  const path = getPath()
-  const name = getName(moduleName)
+async function createMigration(moduleName) {
+  const path = getPath();
+  const name = getName(moduleName);
 
-  const file = getFile('adonis','migration')
-  moduleName.fields = validateFields(moduleName)
-  const template = mountTemplate(file, moduleName)
+  const file = getFile('adonis', 'migration');
+  moduleName.fieldsMigration = validateFields(moduleName);
+  const template = mountTemplate(file, moduleName);
 
-  await createFile(name, path, template)
+  await createFile(name, path, template);
 
   if (moduleName.manyToMany) {
-    await createManyToMany(moduleName, path)
+    await createManyToMany(moduleName, path);
   }
 }
 
 module.exports = {
   createMigration
-}
+};

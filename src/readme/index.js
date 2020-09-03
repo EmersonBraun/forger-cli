@@ -1,9 +1,9 @@
 const { getQuestions } = require('./prompts/index');
-const { createReadme } = require('./generators/index')
+const { createReadme } = require('./generators/index');
 
-module.exports = async function readmeGenerate () {
-  const moduleName = await getQuestions()
+module.exports = async function readmeGenerate() {
+  const moduleName = await getQuestions();
   if (moduleName) {
-    createReadme(moduleName)
+    createReadme(moduleName);
   }
-}
+};

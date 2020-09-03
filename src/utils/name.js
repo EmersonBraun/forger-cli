@@ -1,19 +1,19 @@
-const pluralize = require('pluralize')
-const { camelCase, pascalCase, snakeCase } = require('change-case')
+const pluralize = require('pluralize');
+const { camelCase, pascalCase, snakeCase } = require('change-case');
 
 const toKebabCase = str => {
   return str.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
     .map(x => x.toLowerCase())
-    .join('-')
-}
+    .join('-');
+};
 
-const toSnakeCase = str => snakeCase(str)
-const toSnakeCasePlural = str => snakeCase(pluralize(str))
-const toCamelCase = str => camelCase(str)
-const toPascalCase = str => pascalCase(str)
+const toSnakeCase = str => snakeCase(str);
+const toSnakeCasePlural = str => snakeCase(pluralize(str));
+const toCamelCase = str => camelCase(str);
+const toPascalCase = str => pascalCase(str);
 
-function nameOptions (name) {
-  const plural = pluralize(name)
+function nameOptions(name) {
+  const plural = pluralize(name);
   return {
     camelCase: toCamelCase(name),
     camelCasePlural: toCamelCase(plural),
@@ -22,8 +22,8 @@ function nameOptions (name) {
     pascalCase: toPascalCase(name),
     pascalCasePlural: toPascalCase(plural),
     snakeCase: toSnakeCase(name),
-    snakeCasePlural: toSnakeCase(plural),
-  }
+    snakeCasePlural: toSnakeCase(plural)
+  };
 }
 
 module.exports = {
@@ -32,7 +32,7 @@ module.exports = {
   toSnakeCasePlural,
   toCamelCase,
   toPascalCase,
-  nameOptions,
-}
+  nameOptions
+};
 
 

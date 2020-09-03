@@ -18,7 +18,7 @@ function getColumn(field) {
     }
     return '.dateTime({ autoCreate: true })';
   }
-  return '';
+  return '()';
 }
 
 function validateFields(moduleName) {
