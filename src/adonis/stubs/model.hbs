@@ -10,7 +10,7 @@ import {{modelName}} from './{{modelName}}'
 {{/if}}
 
 export default class {{module.name.pascalCase}} extends BaseModel {
-{{#each module.fields}}
+{{#each module.fieldsModel}}
   @column{{column}}
   public {{name}}: {{type}}
 

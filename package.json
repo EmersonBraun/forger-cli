@@ -28,7 +28,11 @@
   },
   "homepage": "https://github.com/EmersonBraun/forger-cli#readme",
   "scripts": {
-    "test": "npm test"
+    "lint": "eslint --ext .js ./",
+    "release:major": "standard-version --release-as major",
+    "release:minor": "standard-version --release-as minor",
+    "release:patch": "standard-version --release-as patch",
+    "test": "echo \"No test specified\" && exit 0"
   },
   "keywords": [
     "cli",
@@ -39,6 +43,7 @@
     "eslint": "^7.7.0",
     "git-commit-msg-linter": "^2.4.5",
     "husky": "^4.2.5",
-    "lint-staged": "^10.2.13"
+    "lint-staged": "^10.2.13",
+    "standard-version": "^9.0.0"
   }
 }

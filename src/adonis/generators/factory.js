@@ -13,7 +13,7 @@ function getType(field) {
   case 'increments':
     return 'random.number({min:1, max:10})';
   case 'string':
-    return 'random.arrayElement([])';
+    return 'lorem.words(3)';
   case 'integer':
     return 'random.number({min:1, max:10})';
   case 'bigInteger':
@@ -40,14 +40,13 @@ function getType(field) {
 }
 
 function validateFields(moduleName) {
-  return moduleName.fields.map(f => {
-    if (!f.isRelationed && !f.isPrimary) {
-      return {
-        specificType: getType(f),
-        type: f.fieldType,
-        name: f.name
-      };
-    }
+  const filtereds = moduleName.fields.filter(f => !f.isRelationed && !f.isPrimary);
+  return filtereds.map(f => {
+    return {
+      specificType: getType(f),
+      type: f.fieldType,
+      name: f.name
+    };
   });
 }
 

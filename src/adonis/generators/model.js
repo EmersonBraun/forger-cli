@@ -8,6 +8,33 @@ function getName(moduleName) {
   return `${moduleName.name.pascalCase}.ts`;
 }
 
+function getType(field) {
+  switch (field.fieldType) {
+  case 'increments':
+    return 'number';
+  case 'integer':
+    return 'number';
+  case 'bigInteger':
+    return 'number';
+  case 'text':
+    return 'string';
+  case 'float':
+    return 'number';
+  case 'decimal':
+    return 'number';
+  case 'date':
+    return 'Date';
+  case 'datetime':
+    return 'dateTime';
+  case 'time':
+    return 'time';
+  case 'timestamp':
+    return 'timestamp';
+  default:
+    return field.fieldType;
+  }
+}
+
 function getColumn(field) {
   if (field.isPrimary) {
     return '({ isPrimary: true })';
@@ -25,7 +52,7 @@ function validateFields(moduleName) {
   return moduleName.fields.map(f => {
     return {
       column: getColumn(f),
-      type: f.fieldType || 'string',
+      type: getType(f),
       name: f.name
     };
   });
@@ -36,7 +63,7 @@ async function createModel(moduleName) {
   const name = getName(moduleName);
 
   const file = getFile('adonis', 'model');
-  moduleName.fields = validateFields(moduleName);
+  moduleName.fieldsModel = validateFields(moduleName);
   const template = mountTemplate(file, moduleName);
   await createFile(name, path, template);
 }

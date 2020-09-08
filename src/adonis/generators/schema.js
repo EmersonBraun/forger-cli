@@ -23,7 +23,7 @@ function getType(field) {
   case 'decimal':
     return 'number';
   case 'date':
-    return 'Date';
+    return 'date';
   case 'datetime':
     return 'dateTime';
   case 'time':
@@ -31,18 +31,17 @@ function getType(field) {
   case 'timestamp':
     return 'timestamp';
   default:
-    return field.fieldType;
+    return 'string';
   }
 }
 
 function validateFields(moduleName) {
-  return moduleName.fields.map(f => {
-    if (!f.isRelationed && !f.isPrimary) {
-      return {
-        type: getType(f),
-        name: f.name
-      };
-    }
+  const filtereds = moduleName.fields.filter(f => !f.isRelationed && !f.isPrimary);
+  return filtereds.map(f => {
+    return {
+      type: getType(f),
+      name: f.name
+    };
   });
 }
 
@@ -51,7 +50,7 @@ async function createSchema(moduleName) {
   const name = getName(moduleName);
 
   const file = getFile('adonis', 'schema');
-  moduleName.fields = validateFields(moduleName);
+  moduleName.fieldsSchema = validateFields(moduleName);
   const template = mountTemplate(file, moduleName);
   await createFile(name, path, template);
 }
