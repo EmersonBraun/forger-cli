@@ -1,17 +1,17 @@
 import Logger from '@ioc:Adonis/Core/Logger'
-import { getSatusCode, getHappen, getMessage } from './ResponseUtils'
+import { getHappen, getMessage, getSatusCode } from './ResponseUtils'
 
 let data = []
 let statusCode = 400
 let message = ''
 let returnType = 'error'
-let contentError = []
 
 export async function logError (func: string, error: any) {
   Logger.warn(`Repository ${func} Error: ${error}`)
 }
 
 export async function first (Model) {
+  let contentError = ''
   try{
     data = await Model.first()
   } catch(error) {
@@ -27,6 +27,7 @@ export async function first (Model) {
 }
 
 export async function all (Model) {
+  let contentError = ''
   try{
     data = await Model.all()
   } catch(error) {
@@ -42,6 +43,7 @@ export async function all (Model) {
 }
 
 export async function withTrashed (Model) {
+  let contentError = ''
   try{
     data = await Model.where('deleted_at', '<>', null).fetch()
   } catch(error) {
@@ -57,6 +59,7 @@ export async function withTrashed (Model) {
 }
 
 export async function OnlyTrashed (Model) {
+  let contentError = ''
   try{
     data = await Model.where('deleted_at', '<>', null).fetch()
   } catch(error) {
@@ -72,6 +75,7 @@ export async function OnlyTrashed (Model) {
 }
 
 export async function find (Model, id: any) {
+  let contentError = ''
   try{
     data = await Model.find(id)
   } catch(error) {
@@ -87,6 +91,7 @@ export async function find (Model, id: any) {
 }
 
 export async function findOrFail (Model, id: any) {
+  let contentError = ''
   try{
     data = await Model.findOrFail(id)
   } catch(error) {
@@ -102,6 +107,7 @@ export async function findOrFail (Model, id: any) {
 }
 
 export async function create (Model, body: any) {
+  let contentError = ''
   try {
     data = await Model.create(body)
   } catch (error) {
@@ -117,6 +123,7 @@ export async function create (Model, body: any) {
 }
 
 export async function createOrUpdate (Model, id, body: any) {
+  let contentError = ''
   try {
     data = Model.updateOrCreate({ id } ,body)
   } catch (error) {
@@ -132,6 +139,7 @@ export async function createOrUpdate (Model, id, body: any) {
 }
 
 export async function findAndUpdate (Model, id: any, body: any) {
+  let contentError = ''
   const res = await Model.query().where('id', id)
 
   if(!res.length) {
@@ -158,23 +166,15 @@ export async function findAndUpdate (Model, id: any, body: any) {
 }
 
 export async function findAndDelete (Model, id: any) {
-  const res = await Model.query().where('id', id)
-
-  if(!res.length) {
-    statusCode = 404
-    returnType = getHappen(statusCode)
-    message = getMessage('found', statusCode)
-
-    return { data: {}, statusCode, returnType, message, contentError }
-  }
-
+  let contentError = ''
   try {
     data = await Model.query().where('id', id).delete()
   } catch (error) {
     logError('findAndDelete', error)
     contentError = error
   }
-  const returnData = data ? res : {}
+
+  const returnData = data || {}
   statusCode = getSatusCode(contentError, 'delete')
   returnType = getHappen(statusCode)
   message = getMessage('delete', statusCode)
@@ -183,6 +183,7 @@ export async function findAndDelete (Model, id: any) {
 }
 
 export async function findAndRestore (Model, id: any) {
+  let contentError = ''
   try {
     data = await Model.findOrFail(id).update({ deleted_at: null })
   } catch (error) {
@@ -198,6 +199,7 @@ export async function findAndRestore (Model, id: any) {
 }
 
 export async function findAndDestroy (Model, id: any) {
+  let contentError = ''
   try {
     data = await Model.findOrFail(id).delete()
   } catch (error) {
