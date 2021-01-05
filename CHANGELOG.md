@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.1](https://github.com/EmersonBraun/forger-cli/compare/v0.4.0...v0.4.1) (2021-01-05)
+
+
+### Bug Fixes
+
+* solve CRUD and ResponseUtils compatibility ([26589ec](https://github.com/EmersonBraun/forger-cli/commit/26589ecf6ca0f80819e7c723351cff5a5b35832d))
+
 ## 0.4.0 (2020-09-08)
 
 
